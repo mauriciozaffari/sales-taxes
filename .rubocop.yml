@@ -1,0 +1,9 @@
+plugins:
+  - rubocop-performance
+  - rubocop-rspec
+AllCops:
+  TargetRubyVersion: 4.0
+  NewCops: enable
+  SuggestExtensions: false
+Naming/RescuedExceptionsVariableName:
+  PreferredName: error

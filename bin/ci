@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'bundler/setup'
+
+commands = [
+  %w[bundle exec rspec],
+  %w[bundle exec rubocop],
+  %w[bundle exec reek lib],
+  %w[bundle exec flay lib],
+  %w[bundle exec bundler-audit check --update]
+]
+commands.each do |command|
+  puts "\n> #{command.join(' ')}"
+  if command.include?('flay')
+    require 'open3'
+    output, status = Open3.capture2e(*command)
+    puts output
+    abort 'Duplication detected' unless status.success? && output.include?('Total score (lower is better) = 0')
+  else
+    abort "Failed: #{command.join(' ')}" unless system(*command)
+  end
+end
